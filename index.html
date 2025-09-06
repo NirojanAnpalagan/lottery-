@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title data-i18n="title">Sri Lankan Lottery — Results, Games & Ticket Checker</title>
+  <meta name="description" content="Sri Lankan Lottery portal with daily updates, game browser, and ticket checker."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+Tamil:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <div class="logo">🇱🇰</div>
+        <div class="brand-text">
+          <h1 data-i18n="brandTitle">Sri Lankan Lottery</h1>
+          <p class="subtitle" data-i18n="brandSubtitle">Daily Results • Game Browser • Ticket Checker</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-link active" data-route="dashboard" data-i18n="nav.dashboard">Dashboard</button>
+        <button class="nav-link" data-route="games" data-i18n="nav.games">Games</button>
+        <button class="nav-link" data-route="checker" data-i18n="nav.checker">Check Ticket</button>
+        <button class="nav-link" data-route="results" data-i18n="nav.results">Latest Results</button>
+      </nav>
+
+      <div class="right-controls">
+        <div class="lang-select">
+          <select id="lang-select" class="select" aria-label="Language switcher">
+            <option value="en">🇬🇧 English</option>
+            <option value="si">🇱🇰 සිංහල</option>
+            <option value="ta">🇱🇰 தமிழ்</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- DASHBOARD -->
+    <section id="view-dashboard" class="view active">
+      <div class="hero">
+        <div class="hero-left">
+          <h2 data-i18n="dashboard.title">Today’s Sri Lankan Lottery Update</h2>
+          <p class="muted" data-i18n="dashboard.subtitle">Live snapshot of the latest draws, jackpots, and upcoming schedules across DLB, NLB, and SL4D.</p>
+          <div class="quick-actions">
+            <button class="btn btn-primary" data-route="checker" data-i18n="cta.checkTicket">Check My Ticket</button>
+            <button class="btn btn-outline" data-route="games" data-i18n="cta.browseGames">Browse Games</button>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="stat stat-dlb">
+            <span class="label" data-i18n="stat.dlb">DLB Games</span>
+            <span class="value" id="stat-dlb">0</span>
+          </div>
+          <div class="stat stat-nlb">
+            <span class="label" data-i18n="stat.nlb">NLB Games</span>
+            <span class="value" id="stat-nlb">0</span>
+          </div>
+          <div class="stat stat-sl4d">
+            <span class="label" data-i18n="stat.sl4d">SL4D Games</span>
+            <span class="value" id="stat-sl4d">0</span>
+          </div>
+          <div class="stat stat-all">
+            <span class="label" data-i18n="stat.total">Total Games</span>
+            <span class="value" id="stat-total">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid two">
+        <div class="card">
+          <div class="card-header">
+            <h3 data-i18n="dashboard.latestResults">Latest Results</h3>
+            <button class="btn btn-link" data-route="results" data-i18n="btn.viewAll">View all</button>
+          </div>
+          <div class="card-body">
+            <div id="latest-results" class="results-list"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 data-i18n="dashboard.upcoming">Upcoming Draws</h3>
+          </div>
+          <div class="card-body">
+            <div id="upcoming-draws" class="upcoming-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAMES -->
+    <section id="view-games" class="view">
+      <div class="toolbar">
+        <div class="toolbar-group">
+          <input type="search" id="games-search" class="input" placeholder="" data-i18n-placeholder="games.search" />
+          <select id="games-org" class="select">
+            <option value="" data-i18n="other.allOrgs">All Organizations</option>
+            <option value="DLB">DLB</option>
+            <option value="NLB">NLB</option>
+            <option value="SL4D">SL4D</option>
+          </select>
+        </div>
+        <div class="toolbar-group">
+          <span class="legend">
+            <span class="dot dlb"></span> DLB
+            <span class="dot nlb"></span> NLB
+            <span class="dot sl4d"></span> SL4D
+          </span>
+        </div>
+      </div>
+
+      <div id="games-grid" class="games-grid"></div>
+    </section>
+
+    <!-- CHECKER -->
+    <section id="view-checker" class="view">
+      <div class="card">
+        <div class="card-header"><h3 data-i18n="checker.title">Ticket Result Checker</h3></div>
+        <div class="card-body">
+          <ol class="stepper">
+            <li class="step">
+              <div class="step-title" data-i18n="checker.step1">Step 1 — Select a Game</div>
+              <div class="step-body">
+                <select id="checker-game" class="select"></select>
+                <div id="checker-game-info" class="game-info muted mt-8"></div>
+              </div>
+            </li>
+            <li class="step">
+              <div class="step-title" data-i18n="checker.step2">Step 2 — Choose a Draw</div>
+              <div class="step-body">
+                <select id="checker-draw" class="select"></select>
+                <div id="checker-draw-info" class="muted mt-8"></div>
+              </div>
+            </li>
+            <li class="step">
+              <div class="step-title" data-i18n="checker.step3">Step 3 — Enter Your Numbers</div>
+              <div class="step-body">
+                <div id="number-picker" class="number-picker"></div>
+                <div class="mt-8">
+                  <button id="btn-check" class="btn btn-primary" data-i18n="checker.checkBtn">Check Ticket</button>
+                  <button id="btn-clear" class="btn btn-outline" data-i18n="checker.clearBtn">Clear</button>
+                </div>
+              </div>
+            </li>
+          </ol>
+
+          <div id="check-result" class="check-result" hidden></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section id="view-results" class="view">
+      <div class="toolbar">
+        <div class="toolbar-group">
+          <select id="results-org" class="select">
+            <option value="" data-i18n="other.allOrgs">All Organizations</option>
+            <option value="DLB">DLB</option>
+            <option value="NLB">NLB</option>
+            <option value="SL4D">SL4D</option>
+          </select>
+          <input type="search" id="results-search" class="input" placeholder="" data-i18n-placeholder="results.search" />
+        </div>
+        <div class="toolbar-group">
+          <label class="mr-8" data-i18n="results.from">From <input type="date" id="date-from" class="input input-sm" /></label>
+          <label data-i18n="results.to">To <input type="date" id="date-to" class="input input-sm" /></label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div id="results-table" class="table"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- GAME MODAL -->
+  <dialog id="game-modal" class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Game Details</h3>
+      <button id="modal-close" class="icon-btn" aria-label="Close">&times;</button>
+    </div>
+    <div id="modal-body" class="modal-body"></div>
+  </dialog>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© <span id="year"></span> <span data-i18n="footer.copy">Sri Lankan Lottery (Demo)</span></span>
+      <span class="muted" data-i18n="footer.note">DLB / NLB / SL4D — sample data for demo purposes</span>
+    </div>
+  </footer>
+
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
